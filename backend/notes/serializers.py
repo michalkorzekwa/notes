@@ -4,12 +4,8 @@ from .models import Note
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields = ['id', 'title', 'content', 'color', 'position']
-        extra_kwargs = {
-            'user': {'read_only': True},
-            'position': {'required': False},
-            'color': {'required': False, 'default': '#ffeb3b'}
-        }
+        fields = ['id', 'title', 'content', 'color', 'position', 'status', 'user']
+        read_only_fields = ['user']
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user

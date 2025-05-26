@@ -7,6 +7,12 @@ def validate_hex_color(value):
         raise ValidationError('Nieprawidłowy format koloru HEX')
 
 class Note(models.Model):
+    STATUS_CHOICES = [
+        ('todo', 'Do zrobienia'),
+        ('in_progress', 'W trakcie'),
+        ('done', 'Zrobione'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, default='', blank=True)
     content = models.TextField(default='', blank=True)
@@ -16,6 +22,11 @@ class Note(models.Model):
         validators=[validate_hex_color]
     )
     position = models.JSONField(default=dict, blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='todo'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

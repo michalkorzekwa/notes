@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
-  timeout: 5000
+  timeout: 10000
 })
 
 api.interceptors.request.use(config => {
@@ -14,20 +14,22 @@ api.interceptors.request.use(config => {
 })
 
 api.interceptors.response.use(
-  response => response,
+  response => {
+    return response
+  },
   error => {
-    if (!error.response) {
-      error.response = { data: { detail: 'Brak połączenia z serwerem' } }
-    }
     return Promise.reject(error)
   }
 )
 
 export default {
+  createNote: (note) => {
+    
+    return api.post('/notes/', note)
+  },
   login: (credentials) => api.post('/login/', credentials),
   register: (data) => api.post('/register/', data),
   getNotes: () => api.get('/notes/'),
-  createNote: (note) => api.post('/notes/', note),
   updateNote: (id, note) => api.put(`/notes/${id}/`, note),
   deleteNote: (id) => api.delete(`/notes/${id}/`)
 }
